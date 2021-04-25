@@ -1,7 +1,7 @@
 Nasa weather
 ==============
 
-By using this code you are able to retrieve weather data for several localisation in the World. **ONLY OBSERVED DATA**.
+By using this code you are able to retrieve weather data for several localisation in the World. **ONLY OBSERVED DATA**. 
 For more information see: https://power.larc.nasa.gov/docs/v1 .
 
 1. Requirements

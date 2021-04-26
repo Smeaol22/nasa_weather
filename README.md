@@ -18,3 +18,8 @@ Create conda environement:
 > conda install --file requirements.txt
 
 
+3. References
+ https://docs.ropensci.org/nasapower/reference/parameters.html
+ * for parameters definition see https://power.larc.nasa.gov/system/parameters.json
+
+

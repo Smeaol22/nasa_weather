@@ -1,4 +1,5 @@
 import json
+import time
 
 import requests
 
@@ -50,7 +51,7 @@ def retrieve_point_weather_data(longitude, latitude, start_date, end_date, outpu
 
 
 def retrieve_regional_weather_data(box, start_date, end_date, regional_output=RegionalOutput.AVERAGE,
-                                   output_format=OutputFormat.DATAFRAME):
+                                   output_format=OutputFormat.DATAFRAME, data_request_delay=10):
     """
         This function is useful to retrieve weather data on a rectangle/square area
     Args:
@@ -59,17 +60,19 @@ def retrieve_regional_weather_data(box, start_date, end_date, regional_output=Re
         end_date (int): last day to retrieve weather data
         regional_output (RegionalOutput): aggregate and average data or raw data (AVERAGE/RAW)
         output_format (OutputFormat): type of return, see output_format.py for value
+        data_request_delay (int): delay before requesting data and submitted request
     Returns:
         (list(WeatherDay)) / (dataframe): weather data, one for each requested days
     """
-    params = 'RH2M,PRECTOT,WS2M,ALLSKY_SFC_SW_DWN,T2M_MIN,T2M_MAX,T2M'
+
     location = f"&bbox={box[0]},{box[1]},{box[2]},{box[3]}"
     identifier = "Regional"
     response_to_submission = requests.get(
         BASE_URL.format(identifier=identifier, location=location, start_date=start_date, end_date=end_date,
                         params=PARAMS))
     if response_to_submission.status_code >= 200 or response_to_submission.status_code < 300:
-        data_url = 'https://power.larc.nasa.gov/downloads/POWER_Regional_Daily_20191215_20191230_b1d6fc26.json'  # json.loads(response_to_submission.content.decode('utf-8'))['outputs']['json']
+        time.sleep(data_request_delay)
+        data_url = json.loads(response_to_submission.content.decode('utf-8'))['outputs']['json']
         response_data = requests.get(data_url, allow_redirects=True)
         weather_data = json.loads(response_data.content.decode('utf-8'))['features']
         if regional_output == RegionalOutput.RAW:
